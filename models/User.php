@@ -6,6 +6,44 @@
  */
 class User extends ActiveRecord
 {
+
+	/* GETTERS */
+	/**
+	 * Get Current User
+	 * @return User
+	 */
+	public function getCurrentUser() {
+		try {
+			if(!Yii::app()->user->isGuest) {
+				return User::model()->findByPk(Yii::app()->user->id);
+			}
+		}
+		catch(Exception $e) {
+			return null;
+		}
+	}
+
+	/* SCOPES */
+
+	/* SETTERS */
+
+	/* SUPPORT */
+	public function hashPassword($password)
+	{
+		return md5($this->getSalt() . $password);
+	}
+	public function getSalt()
+	{
+		if( empty($this->salt) )
+		{
+			$this->salt = substr(uniqid(),0,4);
+			$this->save();
+		}
+		return $this->salt;
+	}
+
+	/* BASE */
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @return User the static model class
