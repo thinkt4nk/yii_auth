@@ -3,6 +3,16 @@
 class DefaultController extends Controller
 {
 
+	public function accessRules()
+	{
+		return array(
+			'public' => array(
+				'login',
+				'register',
+			),
+		);
+	}
+
 	public function actionLogin()
 	{
 		$LoginForm = new LoginForm();
