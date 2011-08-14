@@ -28,18 +28,16 @@ class User extends ActiveRecord
 	/* SETTERS */
 
 	/* SUPPORT */
-	public function hashPassword($password)
+	public function hashPassword($password,$salt=null)
 	{
-		return md5($this->getSalt() . $password);
+		// Registration salt will be sent with request, otherwise, user is not new
+		if( $salt === null )
+			$salt = $this->salt;
+		return md5($salt . $password);
 	}
-	public function getSalt()
+	public function getNewSalt()
 	{
-		if( empty($this->salt) )
-		{
-			$this->salt = substr(uniqid(),0,4);
-			$this->save();
-		}
-		return $this->salt;
+		return substr(uniqid(),0,4);
 	}
 
 	/* BASE */
@@ -70,9 +68,8 @@ class User extends ActiveRecord
 			array('username, password, email', 'required'),
 			array('username, password, email', 'length', 'max'=>255),
 			array('admin', 'length', 'max'=>1),
-			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('id, username, password, email, admin', 'safe', 'on'=>'search'),
+			array('salt','safe'),
+			array('id, username, password, email, admin, salt', 'safe', 'on'=>'search'),
 		);
 	}
 

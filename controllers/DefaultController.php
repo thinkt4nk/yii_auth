@@ -19,9 +19,9 @@ class DefaultController extends Controller
 		if( !empty($_POST['LoginForm']) )
 		{
 			// process post and login
-			$model->attributes=$_POST['LoginForm'];
+			$LoginForm->attributes=$_POST['LoginForm'];
 			// validate user input and redirect to the previous page if valid
-			if($model->validate() && $model->login())
+			if($LoginForm->validate() && $LoginForm->login())
 				$this->redirect(Yii::app()->user->returnUrl);
 		}
 		$this->render('login',array('model'=>$LoginForm));
@@ -33,6 +33,17 @@ class DefaultController extends Controller
 		if( !empty($_POST['RegistrationForm']) )
 		{
 			// process registration and login
+			$RegistrationForm->setAttributes($_POST['RegistrationForm']);
+			// Validate input and login/redirect if valid
+			if( $RegistrationForm->validate() )
+			{
+				$User = new User();
+				$User->setAttributes($RegistrationForm->processedAttributes);
+				if( $User->save() && $RegistrationForm->login() )
+				{
+					$this->redirect(Yii::app()->user->returnUrl);
+				}
+			}
 		}
 		$this->render('register',array('model'=>$RegistrationForm));
 	}
