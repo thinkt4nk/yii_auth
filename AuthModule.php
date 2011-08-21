@@ -1,5 +1,4 @@
 <?php
-
 class AuthModule extends CWebModule
 {
 	public function init()
