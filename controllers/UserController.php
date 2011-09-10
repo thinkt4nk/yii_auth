@@ -6,9 +6,16 @@ class UserController extends Controller
 	{
 		return array(
 			'admin' => array(
-				'getFlashMessages',
+				//'getFlashMessages',
+				'admin',
 			),
 		);
+	}
+
+	public function actionAdmin()
+	{
+		echo 'meh';die();
+		// stub
 	}
 
 	public function actionGetFlashMessages()
