@@ -7,6 +7,7 @@ class UserController extends Controller
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
 	 */
 	public $layout='//layouts/column2';
+	public $logo_url = '/bridge';
 	public function beforeAction($action)
 	{
 		$this->addCss('_screen');
