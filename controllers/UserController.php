@@ -58,8 +58,13 @@ class UserController extends Controller
 		if(isset($_POST['User']))
 		{
 			$model->attributes=$_POST['User'];
-			if($model->save())
-				$this->redirect(array('view','id'=>$model->id));
+			if (!empty($model->password))
+			{
+				$model->salt = $model->getNewSalt();
+				$model->password = $model->hashPassword($_POST['User']['password'],$model->salt);
+				if($model->save())
+					$this->redirect(array('view','id'=>$model->id));
+			} else $model->addError('password','Password is required');
 		}
 
 		$this->render('create',array(
@@ -81,7 +86,14 @@ class UserController extends Controller
 
 		if(isset($_POST['User']))
 		{
+			$password_set = TRUE;
+			if (isset($_POST['User']['password']) && $_POST['User']['password'] == '') {
+				unset($_POST['User']['password']);
+				$password_set = FALSE;
+			}
 			$model->attributes=$_POST['User'];
+			if ($password_set)
+				$model->password = $model->hashPassword($_POST['User']['password'],$model->salt);
 			if($model->save())
 				$this->redirect(array('view','id'=>$model->id));
 		}

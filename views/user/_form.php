@@ -22,6 +22,13 @@
 	</div>
 
 	<div class="row">
+		<?php $label = ($this->action->id == 'update') ? 'Update Password' : 'Password *'; ?>
+		<?php echo Html::label($label, 'User[password]'); ?>
+		<input type="password" name="User[password]" />
+		<?php echo $form->error($model,'password'); ?>
+	</div>
+
+	<div class="row">
 		<?php echo $form->labelEx($model,'admin'); ?>
 		<?php echo $form->checkbox($model,'admin'); ?>
 		<?php echo $form->error($model,'admin'); ?>
